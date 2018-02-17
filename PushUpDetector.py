@@ -17,7 +17,7 @@ while 1:
 
     for (x,y,w,h) in faces:
         cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-        headHeight.append((x-y)/2)
+        headHeight.append((x+y)/2)
         roi_gray = gray[y:y+h, x:x+w]
         roi_color = img[y:y+h, x:x+w]
         eyes = eye_cascade.detectMultiScale(roi_gray)
@@ -36,6 +36,8 @@ cv2.destroyAllWindows()
 def HeightData():
     #use to get list of height got head
     return headHeight
-thefile = open('data3.txt', 'w')
-for item in HeightData():
-    thefile.write("%s\n" % item)
+
+#moaking fake text file for data
+# thefile = open('data3.txt', 'w')
+# for item in HeightData():
+#     thefile.write("%s\n" % item)
