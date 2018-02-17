@@ -36,6 +36,6 @@ cv2.destroyAllWindows()
 def HeightData():
     #use to get list of height got head
     return headHeight
-thefile = open('data2.txt', 'w')
+thefile = open('data3.txt', 'w')
 for item in HeightData():
     thefile.write("%s\n" % item)
