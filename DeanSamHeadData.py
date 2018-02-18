@@ -9,6 +9,8 @@
 import matplotlib.pyplot as plt
 from scipy.interpolate import spline
 import numpy as np
+import statistics
+import math
 y =[]
 with open('data/RealData2018-02-18_01-26-37.txt') as f:
     for line in f:
@@ -18,10 +20,57 @@ with open('data/RealData2018-02-18_01-26-37.txt') as f:
             y.append(float((numbers_float[0])))
 
 
-x = [i for i in range(len(y))]
+
 # x, y = np.array(x),np.array(y)
 # x_smooth = np.linspace(x.min(),x.max(),100)
 # y_smooth = spline(x,y,x_smooth)
+def cleanY(y_data):
+    #removing the messy data you get at the start and end
+    dataToReturn = y_data[20:-20]
+    sizeToRomove  =  20
+    dataMean = statistics.mean(y_data)
+    std =  statistics.stdev(y_data)
+    uppedstd = dataMean+std
+    lowerstd = dataMean-std
+    for i in range(0,len(dataToReturn)):
+        if dataToReturn[i]>uppedstd:
+            dataToReturn[i] =uppedstd
+        elif dataToReturn[i]<lowerstd:
+            dataToReturn[i] =  lowerstd
 
-plt.plot(x,y)
+    return dataToReturn
+y = cleanY(y)
+
+def FindNumberOfOs(y_data):
+    dataMean = statistics.mean(y_data)
+    numOfOs = 0
+    sizeOfBlock = 10
+    print(dataMean)
+    for i in range(0,len(y_data)-sizeOfBlock*2,10):
+        if statistics.mean(y_data[i+sizeOfBlock:i+sizeOfBlock*2]) > dataMean and statistics.mean(y_data[i:i+sizeOfBlock]) < dataMean:
+            numOfOs += 1
+    return numOfOs
+
+print(FindNumberOfOs(y))
+
+#un hash to plot graph!!!!
+x = [i for i in range(len(y))]
+# plt.plot(x,y)
+# plt.show()
+
+def sinMatching(y_data):
+    amp = max(y_data)-min(y_data)
+    c = statistics.mean(y_data)
+    w = 1/(len(y_data)//2)
+    print(w)
+    matchDif =[]
+    for i in range(0,len(y_data)//10):
+        sinData = [amp*math.sin(w*x)+c for x in range(len(y_data))]
+        matchDif.append([0])
+        for j in range(len(y_data)):
+            matchDif[i][0] = abs(sinData[i]- y_data[j]) + matchDif[i][0]
+    return matchDif
+
+print(sinMatching(y))
+plt.plot(sinMatching(y))
 plt.show()
