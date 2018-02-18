@@ -63,5 +63,6 @@ fullName = baseName+ dateTime+ extention
 # print(fullName)
 # thefile = open('data4WithNewMotion.txt', 'w')
 thefile = open(subdic+fullName, 'w')
-for item in meanLocation:
-    thefile.write("%s\n" % item)
+with open(subdic+fullName, 'w') as thefile:
+    for item in meanLocation:
+        thefile.write("%s\n" % item)
